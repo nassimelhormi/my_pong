@@ -10,15 +10,13 @@
  *  @param name
  *  @return t_player
  ***/
-t_player *init_player(char *name)
+t_player *init_player()
 {
   t_player *player;
 
   player = malloc(sizeof(t_player));
   if (player == NULL)
-      return (0);
-
-  player->name = strdup(name);
+    return (0);
   player->index = 0;
   player->status = 0;
   player->prev = NULL;
@@ -82,6 +80,5 @@ void	destroy_player(t_list_player *list_player, t_player *player)
       player->prev->next = player->next;
       list_player->nb_player--;
     }
-  free(player->name);
   free(player);
 }

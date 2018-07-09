@@ -7,7 +7,6 @@
 
 typedef struct		s_player
 {
-  char			      *name;
   int             index;
   int             status; //0: dead, 10: alive
   struct          s_player	*next;
@@ -23,7 +22,7 @@ typedef struct		  s_list_player
 
 
 // player.c
-t_player        *init_player(char *name);
+t_player        *init_player();
 void            add_player(t_list_player *list_player, t_player *player);
 void	          destroy_player(t_list_player *list_player, t_player *player);
 

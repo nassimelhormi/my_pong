@@ -1,5 +1,7 @@
 #include "sdl.h"
 #include "socket.h"
+#include "list.h"
+#include "map.h"
 
 /***
  *  sdl.c
@@ -185,7 +187,6 @@ void		sdl_menu(t_sdl *sdl)
     }
     return;
 }
-
 
 /***
  *  Delete la strucutre s_sdl

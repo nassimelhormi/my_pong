@@ -1,5 +1,7 @@
 #include "list.h"
 #include "sdl.h"
+#include "socket.h"
+#include "map.h"
 
 int main()
 {

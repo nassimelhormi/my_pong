@@ -6,30 +6,11 @@
  ***/
 
 /***
- *  Initialise la strucutre s_client
- *  @param empty
- *  @return t_client
- ***/
-t_client *init_struct_client()
-{
-    t_client *client;
-    
-    client = malloc(sizeof(t_client));
-    if (client == NULL)
-        return (NULL);
-
-    client->fd_first = 0;
-    client->fd_second = 0; 
-
-    return (client);
-}
-
-/***
  *  Boucle client
  *  @param empty
  *  @return void
  ***/
-void client_loop(t_client *client)
+void client_loop()
 {
     int sid;
     int co;
@@ -43,11 +24,6 @@ void client_loop(t_client *client)
         exit(1);
     }
     printf("[+] La socket client est : %d", sid);
-    if (client->fd_first == 0)
-        client->fd_first = sid;
-    else
-        client->fd_second = sid;
-
     memset(&server_sock, '\0', sizeof(server_sock));
     server_sock.sin_family = AF_INET;
     server_sock.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -63,10 +39,8 @@ void client_loop(t_client *client)
 
     while(42)
     {
-        printf("\nEnter the string:");
-        scanf("%s", &buffer[0]);
-        send(sid, buffer, strlen(buffer), 0);
-        printf("Envoi de datas au serveur...\n");
+        //send(sid, buffer, strlen(buffer), 0);
+        //printf("Envoi de datas au serveur...\n");
         if (recv(sid, buffer, 1024, 0) < 0)
         {
             perror("Recv Client");
@@ -80,8 +54,5 @@ void client_loop(t_client *client)
 
 void start_client()
 {
-    t_client *client;
-
-    client = init_struct_client();
-    client_loop(client);
+    client_loop();
 }

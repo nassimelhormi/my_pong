@@ -25,7 +25,7 @@ t_list_player *init_list_player()
 }
 
 /***
- *  Affiche le contenu de la list
+ *  Affiche le contenu de la list (print des fd des clients)
  *  @param t_list_player
  *  @return void
  ***/
@@ -36,7 +36,7 @@ void  print_list_player(t_list_player *list)
   tmp = list->first;
   while (tmp)
   {
-    printf("[+] %s", tmp->name);
+    printf("[+] %d", tmp->index);
     tmp = tmp->next;
   }
   putchar('\n');

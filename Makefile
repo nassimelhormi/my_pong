@@ -5,7 +5,9 @@ SRC		=	main.c \
 			player.c \
 			sdl.c \
 			server.c \
-			client.c
+			client.c \
+			map.c \
+			map_2.c
 
 OBJ		=	$(SRC:.c=.o)
 
