@@ -40,6 +40,8 @@ void init_socket_server(t_server *server)
         perror("Socket");
         exit(1);
     }
+    printf("[+] La socket serveur est : %d", server_fd);
+    putchar('\n');
     memset(&server_addr, '\0', sizeof(server_addr));
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(PORT); // 4242
@@ -71,6 +73,7 @@ void server_loop(t_server *server)
     int new_socket;
     struct sockaddr_in client_addr;
     char buffer[1024];
+    pid_t childpid;
 
     memset(&client_addr, 0, sizeof(struct sockaddr_in));
     sin_len_client = sizeof(client_addr);
@@ -81,18 +84,19 @@ void server_loop(t_server *server)
         new_socket = accept(server->fd, (struct sockaddr *)&client_addr, &sin_len_client);
         printf("Client %d accepted", new_socket);
         printf("Fork...\n");
-        if(fork() == 0) 
+        if((childpid = fork()) == 0) 
         {
-            receiv_data_from_client(new_socket, buffer);
-            close(new_socket);
-            exit(0);
-        }
-        else
-        {
-            perror("Fork");
-            exit(1);
+            close(server->fd);
+            while(42)
+            {
+                recv(new_socket, buffer, 1024, 0);
+                printf("Client: %s\n", buffer);
+				send(new_socket, buffer, strlen(buffer), 0);
+				bzero(buffer, sizeof(buffer));
+            }
         }
     }
+    close(new_socket);
 }
 
 void receiv_data_from_client(int client_fd, char *recvBuff)

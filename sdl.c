@@ -167,7 +167,7 @@ void		sdl_menu(t_sdl *sdl)
 	                x = event_queue.button.x;
 	                y = event_queue.button.y;
 	                if (( x > join_position.x ) && ( x < join_position.x + join_position.w ) && ( y > join_position.y ) && ( y < join_position.y + join_position.h ) ) {
-                        client_loop();
+                        start_client();
                         printf("join button pressed\n");
 	                }
 	                if (( x > create_position.x ) && ( x < create_position.x + create_position.w ) && ( y > create_position.y ) && ( y < create_position.y + create_position.h ) ) {
