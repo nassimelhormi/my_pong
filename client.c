@@ -1,5 +1,8 @@
+#include "list.h"
 #include "socket.h"
+#include "map.h"
 
+t_game pong;
 /***
  *  client.c
  *  fonction server
@@ -47,12 +50,19 @@ void client_loop()
             exit(1);
         }
         else
-            printf("Server message : %s\n", buffer);
+        {
+            printf("Voici la map : %s\n", buffer);
+            putchar('\n');
+            printf("pong.client_map = \n");
+            string_to_map(buffer, pong.map_client);
+            print_map(pong.map_client);
+        }
     }
     close(sid);
 }
 
 void start_client()
 {
+    pong.map_client = init_map();
     client_loop();
 }
