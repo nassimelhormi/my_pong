@@ -19,7 +19,9 @@ void client_loop()
     int co;
     struct sockaddr_in server_sock;
     char buffer[1024];
+    char *map_for_client;
 
+    map_for_client = NULL;
     sid = socket(AF_INET, SOCK_STREAM, 0);
     if (sid < 0)
     {
@@ -50,11 +52,13 @@ void client_loop()
         }
         else
         {
-            printf("Voici la map : %s\n", buffer);
-            putchar('\n');
-            printf("client side = \n");
+            printf("Initialisation pong.map_client\n");
+            pong.map_client = init_map();
+            printf("Map received : %s\n", buffer);
+            //strcpy(map_for_client, buffer);
+            //printf("strcpy map_for_client : %s\n", map_for_client);
             string_to_map(buffer, pong.map_client);
-            //print_map(pong.map_client);
+            print_map(pong.map_client);
             //sdl_map(pong.map_client, sdl);
         }
     }
@@ -63,7 +67,6 @@ void client_loop()
 
 void start_client()
 {
-    printf("Initialisation pong.map_client\n");
-    pong.map_client = init_map();
+    
     client_loop();
 }
