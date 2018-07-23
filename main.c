@@ -3,6 +3,11 @@
 #include "socket.h"
 #include "map.h"
 
+/***
+ *  main.c
+ *  main fonction
+ ***/
+
 int main()
 {
     t_sdl *sdl;
@@ -12,5 +17,6 @@ int main()
     sdl = init_fronts(sdl);
     sdl_menu(sdl);
     destroy_sdl(sdl);
+    
     return (0);
 }

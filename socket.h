@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <netdb.h>
 #include "list.h"
+#include "sdl.h"
 
 # define PORT 4242
 

@@ -53,9 +53,10 @@ void client_loop()
         {
             printf("Voici la map : %s\n", buffer);
             putchar('\n');
-            printf("pong.client_map = \n");
+            printf("client side = \n");
             string_to_map(buffer, pong.map_client);
             print_map(pong.map_client);
+            //sdl_map(pong.map_client, sdl);
         }
     }
     close(sid);
@@ -63,6 +64,7 @@ void client_loop()
 
 void start_client()
 {
+    printf("Initialisation pong.map_client\n");
     pong.map_client = init_map();
     client_loop();
 }

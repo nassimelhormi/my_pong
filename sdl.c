@@ -3,6 +3,8 @@
 #include "list.h"
 #include "map.h"
 
+t_game pong;
+
 /***
  *  sdl.c
  *  fonction sdl
@@ -33,6 +35,8 @@ t_sdl *init_sdl()
     sdl->join_game = NULL;
     sdl->create_game = NULL;
     sdl->server_welcome = NULL;
+    sdl->ground = NULL;
+    sdl->player = NULL;
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
         destroy_sdl(sdl);
@@ -85,8 +89,8 @@ t_sdl *init_fronts(t_sdl *sdl)
         printf("No renderer\n");
         return (NULL);
     }
-    SDL_Surface *image, *join_game_text, *create_server_text, *server_welcome_text, *white;
-    SDL_Texture *background_texture, *join_texture, *server_texture, *server_welcome, *white_black;
+    SDL_Surface *image, *surface_player,*surface_ground,*join_game_text, *create_server_text, *server_welcome_text, *white;
+    SDL_Texture *background_texture, *ground, *player,*join_texture, *server_texture, *server_welcome, *white_black;
     SDL_Color black = {65, 105, 225, 0};
     TTF_Font *police;
 
@@ -133,11 +137,19 @@ t_sdl *init_fronts(t_sdl *sdl)
       printf("No textures loaded 3.\n");
       SDL_ShowSimpleMessageBox(0, "init texture error", SDL_GetError(), sdl->window);
     }
+    surface_ground = IMG_Load("./ground.png");
+    surface_player = IMG_Load("./player.png");
+    
+    ground = SDL_CreateTextureFromSurface(sdl->renderer, surface_ground);
+    player = SDL_CreateTextureFromSurface(sdl->renderer, surface_player);
+
     sdl->menu_background = background_texture;
     sdl->white_black = white_black;
     sdl->join_game = join_texture;
     sdl->create_game = server_texture;
     sdl->server_welcome = server_welcome;
+    sdl->ground = ground;
+    sdl->player = player;
 
     return (sdl);
 }
@@ -152,10 +164,12 @@ void		sdl_menu(t_sdl *sdl)
     int		quit = 0;
     int		x;
     int   	y;
+    int     map_shown;
     SDL_Event	event_queue;
     SDL_Rect      join_position = {200, 300, 400, 60};
     SDL_Rect      create_position = {200, 400, 400, 60};
 
+    map_shown = 0;
     while(!quit) 
     {
         while(SDL_PollEvent(&event_queue)) 
@@ -170,6 +184,8 @@ void		sdl_menu(t_sdl *sdl)
 	                y = event_queue.button.y;
 	                if (( x > join_position.x ) && ( x < join_position.x + join_position.w ) && ( y > join_position.y ) && ( y < join_position.y + join_position.h ) ) {
                         start_client();
+                        map_shown = 1;
+                        //print_map(pong.map_client);
                         printf("join button pressed\n");
 	                }
 	                if (( x > create_position.x ) && ( x < create_position.x + create_position.w ) && ( y > create_position.y ) && ( y < create_position.y + create_position.h ) ) {
@@ -179,11 +195,20 @@ void		sdl_menu(t_sdl *sdl)
 	                break;
             }
         }
-        SDL_RenderClear(sdl->renderer);
-        SDL_RenderCopy(sdl->renderer, sdl->menu_background, NULL, NULL);
-        SDL_RenderCopy(sdl->renderer, sdl->join_game, NULL, &join_position);
-        SDL_RenderCopy(sdl->renderer, sdl->create_game, NULL, &create_position);
-        SDL_RenderPresent(sdl->renderer);
+        if (map_shown == 0)
+        {
+            SDL_RenderClear(sdl->renderer);
+            SDL_RenderCopy(sdl->renderer, sdl->menu_background, NULL, NULL);
+            SDL_RenderCopy(sdl->renderer, sdl->join_game, NULL, &join_position);
+            SDL_RenderCopy(sdl->renderer, sdl->create_game, NULL, &create_position);
+            SDL_RenderPresent(sdl->renderer);
+        }
+        else
+        {
+            printf("SDL side = \n");
+            print_map(pong.map_client);
+        }
+
     }
     return;
 }
@@ -207,5 +232,33 @@ void destroy_sdl(t_sdl *sdl)
         IMG_Quit();
         SDL_Quit();
         free(sdl);
+    }
+}
+
+void sdl_map(char **map, t_sdl *sdl)
+{
+    SDL_Rect      pos_case;
+    
+    int y;
+    int x;
+
+    pos_case.x = 0;
+    pos_case.y = 0;
+    pos_case.w = CELL_SIZE * ZOOM;
+    pos_case.h = CELL_SIZE * ZOOM;
+    for (x = 0; x < SIZE; x++)
+    {
+        for (y =0; y < SIZE; y++)
+        {
+            pos_case.x = x  * CELL_SIZE * ZOOM;
+            if (map[y][x] == '1')
+            {
+                SDL_RenderCopy(sdl->renderer, sdl->player, NULL, &pos_case);
+            }
+            else
+            {
+                SDL_RenderCopy(sdl->renderer, sdl->ground, NULL, &pos_case);
+            }
+        }
     }
 }

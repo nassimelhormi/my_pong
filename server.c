@@ -79,6 +79,7 @@ void server_loop(t_server *server, t_list_player *list_player)
     char buffer[1024];
     pid_t childpid;
     t_player *player;
+    t_player *tmp;
 
     memset(&client_addr, 0, sizeof(struct sockaddr_in));
     sin_len_client = sizeof(client_addr);
@@ -101,9 +102,22 @@ void server_loop(t_server *server, t_list_player *list_player)
             {
                 strcpy(buffer, map_for_client);
                 printf("Envoie la map au client : %s\n", buffer);
-                send(new_socket, buffer, strlen(buffer), 0);
+                if (list_player->nb_player == 1)
+                {
+                    send(new_socket, buffer, strlen(buffer), 0);
+                }
+                if (list_player->nb_player > 1)
+                {
+                    tmp = list_player->first;
+                    while (tmp)
+                    {
+                        printf("Sending to all client\n");
+                        send(tmp->index, buffer, strlen(buffer), 0);
+                        tmp = tmp->next;
+                    }
+                }
                 recv(new_socket, buffer, 1024, 0);
-				bzero(buffer, sizeof(buffer));
+                bzero(buffer, sizeof(buffer));
             }
         }
     }
