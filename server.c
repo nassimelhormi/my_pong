@@ -106,7 +106,7 @@ void server_loop(t_server *server, t_list_player *list_player)
                 {
                     send(new_socket, buffer, strlen(buffer), 0);
                 }
-                if (list_player->nb_player > 1)
+                if (list_player->nb_player == 2)
                 {
                     tmp = list_player->first;
                     while (tmp)

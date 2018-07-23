@@ -91,19 +91,25 @@ void string_to_map(char* map_string, char **map)
   j = 0;
   k = 0;
 
+  printf("Dans la fonction string_to_map\n");
+  printf("map_string : %s", map_string);
   for (k = 0; k < strlen(map_string); k++)
   { 
+      printf("Dans la boucle\n");
       if (map_string[k] != '\n')
       {
+        printf("First if\n");
         map[i][j] = map_string[k];
         j++;
       }
       else
       {
+        printf("else\n");
         i++;
         j = 0;
       }
-  } 
+  }
+  printf("Fin de la fonction string_to_map\n");
 }
 
 /***

@@ -39,7 +39,6 @@ void client_loop()
         exit(1);
     }
     printf("[+] Le client est connecte au serveur\n");
-
     while(42)
     {
         //send(sid, buffer, strlen(buffer), 0);
@@ -55,7 +54,7 @@ void client_loop()
             putchar('\n');
             printf("client side = \n");
             string_to_map(buffer, pong.map_client);
-            print_map(pong.map_client);
+            //print_map(pong.map_client);
             //sdl_map(pong.map_client, sdl);
         }
     }
