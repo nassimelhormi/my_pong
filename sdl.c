@@ -238,21 +238,23 @@ void sdl_map(char **map, t_sdl *sdl)
 
     pos_case.x = 0;
     pos_case.y = 0;
-    pos_case.w = CELL_SIZE * ZOOM;
-    pos_case.h = CELL_SIZE * ZOOM;
-    for (x = 0; x < SIZE; x++)
+    pos_case.w = 20 * 1;
+    pos_case.h = 20 * 1;
+    for (y = 0; y < SIZE; y++)
     {
-        for (y =0; y < SIZE; y++)
+        pos_case.y = y * 20 * 1;
+        for (x =0; x < SIZE; x++)
         {
-            pos_case.x = x  * CELL_SIZE * ZOOM;
+            pos_case.x = x * 20 * 1;
+            if (map[y][x] == '0')
+            {
+                SDL_RenderCopy(sdl->renderer, sdl->ground, NULL, &pos_case);
+            }
             if (map[y][x] == '1')
             {
                 SDL_RenderCopy(sdl->renderer, sdl->player, NULL, &pos_case);
             }
-            else
-            {
-                SDL_RenderCopy(sdl->renderer, sdl->ground, NULL, &pos_case);
-            }
         }
     }
+    SDL_RenderPresent(sdl->renderer);
 }

@@ -39,7 +39,7 @@ char  **init_map()
       return NULL;
     for (j = 0; j < SIZE; j++)
     {
-      map[i][j] = 0;
+      map[i][j] = '0';
     }
   }
   return (map);
