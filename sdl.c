@@ -183,7 +183,7 @@ void		sdl_menu(t_sdl *sdl)
 	                x = event_queue.button.x;
 	                y = event_queue.button.y;
 	                if (( x > join_position.x ) && ( x < join_position.x + join_position.w ) && ( y > join_position.y ) && ( y < join_position.y + join_position.h ) ) {
-                        start_client();
+                        start_client(sdl);
                         map_shown = 1;
                         //print_map(pong.map_client);
                         printf("join button pressed\n");
@@ -203,12 +203,6 @@ void		sdl_menu(t_sdl *sdl)
             SDL_RenderCopy(sdl->renderer, sdl->create_game, NULL, &create_position);
             SDL_RenderPresent(sdl->renderer);
         }
-        else
-        {
-            printf("SDL side = \n");
-            print_map(pong.map_client);
-        }
-
     }
     return;
 }

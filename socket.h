@@ -36,6 +36,6 @@ void        receiv_data_from_client(int client_fd, char *recvBuff);
 
 // client.c
 void        client_loop();
-void        start_client();
+void        start_client(t_sdl *sdl);
 
 #endif

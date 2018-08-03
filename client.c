@@ -55,18 +55,30 @@ void client_loop()
             printf("Initialisation pong.map_client\n");
             pong.map_client = init_map();
             printf("Map received : %s\n", buffer);
-            //strcpy(map_for_client, buffer);
-            //printf("strcpy map_for_client : %s\n", map_for_client);
             string_to_map(buffer, pong.map_client);
             print_map(pong.map_client);
-            //sdl_map(pong.map_client, sdl);
         }
     }
     close(sid);
 }
 
-void start_client()
+void start_client(t_sdl *sdl)
 {
+    SDL_Rect  join_position = {200, 300, 400, 60};
+
+    //render updates from server
+    SDL_RenderClear(sdl->renderer);
+    SDL_RenderCopy(sdl->renderer, sdl->white_black, NULL, NULL);
+    SDL_RenderCopy(sdl->renderer, sdl->server_welcome, NULL, &join_position);
+
+    //Just pour le test, affiche un mur vide..
+    SDL_RenderClear(sdl->renderer);
+    SDL_RenderCopy(sdl->renderer, sdl->white_black, NULL, NULL);
+    //paint_map(sdl, sdl->renderer, bomberman.map_client);
+    //Fin de test
+
+    SDL_RenderPresent(sdl->renderer);
+    //sdl_map(pong.map_client, sdl);
     
     client_loop();
 }
