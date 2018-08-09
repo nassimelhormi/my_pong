@@ -44,7 +44,7 @@ void client_loop(t_sdl *sdl)
     while(42)
     {
         //send(sid, buffer, strlen(buffer), 0);
-        //printf("Envoi de datas au serveur...\n");
+        printf("{{{ SOCKET SERVER = %d}}}\n", sid);
         if (recv(sid, buffer, 1024, 0) < 0)
         {
             perror("Recv Client");
@@ -55,16 +55,31 @@ void client_loop(t_sdl *sdl)
             printf("Map received : %s\n", buffer);
             printf("[+] Call function string_to_map()\n");
             string_to_map(buffer, pong.map_client);
-            sdl_map(pong.map_client, sdl);
+            sdl_map(pong.map_client, sdl, sid);
+            printf("{ { { NOW WE ARE HERE } } }\n");
         }
     }
     close(sid);
 }
 
+/***
+ *  Run les fonctions client
+ *  @param t_sdl
+ *  @return void
+ ***/
 void start_client(t_sdl *sdl)
 {
     printf("Initialisation pong.map_client\n");
     pong.map_client = init_map();
     SDL_RenderClear(sdl->renderer);
     client_loop(sdl);
+}
+
+int     write_message(int sock_fd, char *buffer)
+{
+    int status;
+    status = send(sock_fd, buffer, 2, 0);
+    if (status < 0)
+      return (0);
+    return (1);
 }

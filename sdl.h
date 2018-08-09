@@ -32,6 +32,6 @@ void        destroy_sdl(t_sdl *sdl);
 void		sdl_menu(t_sdl *sdl);
 t_sdl       *init_fronts(t_sdl *sdl);
 t_sdl       *init_window(t_sdl *sdl);
-void        sdl_map(char **map, t_sdl *sdl);
+void        sdl_map(char **map, t_sdl *sdl, int sid);
 
 #endif

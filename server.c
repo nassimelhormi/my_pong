@@ -116,8 +116,9 @@ void server_loop(t_server *server, t_list_player *list_player)
                         tmp = tmp->next;
                     }
                 }
-                recv(new_socket, buffer, 1024, 0);
                 bzero(buffer, sizeof(buffer));
+                recv(new_socket, &buffer, 3, 0);
+                printf("recv from client %s\n", buffer);
             }
         }
     }

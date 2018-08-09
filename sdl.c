@@ -177,31 +177,43 @@ void		sdl_menu(t_sdl *sdl)
             switch(event_queue.type)
             {
                 case SDL_QUIT:
-	                quit = 1;
-	                break;
+                    quit = 1;
+                break;
+
+                case SDL_KEYUP:
+                    printf( "Key SDL_KEYUP...... detected\n" );
+                    switch (event_queue.key.keysym.sym)
+                    {
+                        case SDLK_DOWN:
+                            printf("WRITE D\n");
+                            break;
+                        case SDLK_UP:
+                            printf("WRITE U\n");
+                            break;
+                    }
+                break;
+
                 case SDL_MOUSEBUTTONDOWN:
-	                x = event_queue.button.x;
-	                y = event_queue.button.y;
-	                if (( x > join_position.x ) && ( x < join_position.x + join_position.w ) && ( y > join_position.y ) && ( y < join_position.y + join_position.h ) ) {
-                        start_client(sdl);
+                    x = event_queue.button.x;
+                    y = event_queue.button.y;
+
+                    if (( x > join_position.x ) && ( x < join_position.x + join_position.w ) && ( y > join_position.y ) && ( y < join_position.y + join_position.h ) ) {
                         map_shown = 1;
-                        //print_map(pong.map_client);
-                        printf("join button pressed\n");
-	                }
-	                if (( x > create_position.x ) && ( x < create_position.x + create_position.w ) && ( y > create_position.y ) && ( y < create_position.y + create_position.h ) ) {
+                        start_client(sdl);
+                    }
+                    if (( x > create_position.x ) && ( x < create_position.x + create_position.w ) && ( y > create_position.y ) && ( y < create_position.y + create_position.h ) ) {
                         start_server();
-                        printf("server button pressed\n");
-	                }
-	                break;
+                    }
+                break;
             }
-        }
-        if (map_shown == 0)
-        {
-            SDL_RenderClear(sdl->renderer);
-            SDL_RenderCopy(sdl->renderer, sdl->menu_background, NULL, NULL);
-            SDL_RenderCopy(sdl->renderer, sdl->join_game, NULL, &join_position);
-            SDL_RenderCopy(sdl->renderer, sdl->create_game, NULL, &create_position);
-            SDL_RenderPresent(sdl->renderer);
+            if (map_shown == 0)
+            {
+                SDL_RenderClear(sdl->renderer);
+                SDL_RenderCopy(sdl->renderer, sdl->menu_background, NULL, NULL);
+                SDL_RenderCopy(sdl->renderer, sdl->join_game, NULL, &join_position);
+                SDL_RenderCopy(sdl->renderer, sdl->create_game, NULL, &create_position);
+                SDL_RenderPresent(sdl->renderer);
+            }
         }
     }
     return;
@@ -229,8 +241,14 @@ void destroy_sdl(t_sdl *sdl)
     }
 }
 
-void sdl_map(char **map, t_sdl *sdl)
+/***
+ *  Transforme une map, map sdl
+ *  @param **map & sdl
+ *  @return void
+ ***/
+void sdl_map(char **map, t_sdl *sdl, int sid)
 {
+    printf("[+][+][+] La socket server est %d\n", sid);
     SDL_Rect      pos_case;
     
     int y;
@@ -257,4 +275,36 @@ void sdl_map(char **map, t_sdl *sdl)
         }
     }
     SDL_RenderPresent(sdl->renderer);
+
+    int quit = 0;
+    SDL_Event	event_queue;
+    char buffer[1024];
+    while(!quit) 
+    {
+        while(SDL_PollEvent(&event_queue)) 
+        {
+            switch(event_queue.type)
+            {
+                case SDL_QUIT:
+                    quit = 1;
+                break;
+
+                case SDL_KEYUP:
+                    printf( "Key SDL_KEYUP...... detected\n" );
+                    switch (event_queue.key.keysym.sym)
+                    {
+                        case SDLK_DOWN:
+                            printf("WRITE D\n");
+                            strcpy(buffer, "D");
+                            send(sid, buffer, strlen(buffer), 0);
+                            break;
+                        case SDLK_UP:
+                            printf("WRITE U\n");
+                            strcpy(buffer, "U");
+                            send(sid, buffer, strlen(buffer), 0);
+                            break;
+                    }
+            }
+        }
+    }
 }
